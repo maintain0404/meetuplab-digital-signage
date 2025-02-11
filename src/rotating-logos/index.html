@@ -2,6 +2,8 @@
 <body>
 <style>
     .container {
+        width: 100vw;
+        height: 100vh;
         display: grid;
         grid-template-columns: repeat(var(--columns), 1fr);
         grid-template-rows: repeat(var(--rows), 1fr);
@@ -13,7 +15,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1;
-        width: 80vh;
+        width: 80vw;
         background-color: rgba(255, 255, 255, 0.8);
         box-shadow: 
             0 0 10px rgba(255, 255, 255, 0.8),
@@ -64,7 +66,6 @@
             div.className = 'logo-container';
             div.style.gridColumn = `${col + 1}`;
             div.style.gridRow = `${row + 1}`;
-            div.style.setProperty('--random-rotation', `${Math.random() * 360}deg`);
             div.style.setProperty('--random-time', `${Math.random() * 30 + 0.3}s`)
             div.appendChild(clone);
             container.appendChild(div);
