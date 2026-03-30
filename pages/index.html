@@ -1,0 +1,88 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://davidpaulsson.github.io/no-class/css/no-class.min.css" type="text/css">
+</head>
+<body>
+<div class="container">
+    <div class="small-page-container">
+        <div class="small-page-wrapper">
+            <iframe 
+                src="./rotating-logos/index.html" 
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="small-page-description">
+            설명
+        </div>
+    </div>
+   <div class="small-page-container">
+        <div class="small-page-wrapper">
+            <iframe 
+                src="./rotating-logos/index.html" 
+                frameborder="0" 
+                allow="autoplay; encrypted-media" 
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="small-page-description">
+            설명
+        </div>
+    </div>
+</div>
+<style>
+    {{/* body styles */}}
+    body {
+        margin: 0;
+        padding: 0;
+    }           
+    @media (prefers-color-scheme: light) {
+        body {
+            background-color: white;
+            color: black;
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        body {
+            background-color: black;
+            color: white;
+        }
+    }
+
+    {{/* 전체 배치용 컨테이너 div */}}
+    .container {
+        width: 100vw;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1em;
+        overflow-x: hidden;
+        padding-x: 20px;
+    }
+
+    {{/* 작은 페이지 담은 div */}}
+    .small-page-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .small-page-container .small-page-wrapper {
+        aspect-ratio: 16 / 9;
+    }
+
+    .small-page-container .small-page-wrapper iframe {
+        width: 400%;
+        height: 400%;
+        transform: scale(0.25, 0.25);
+        transform-origin: 0 0;
+    }
+
+    .small-page-container .small-page-description {
+        padding: 4px;
+    }
+    </style>
+</body>
