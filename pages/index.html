@@ -36,7 +36,7 @@
     </div>
 </div>
 <style>
-    {{/* body styles */}}
+    /* body styles */
     body {
         margin: 0;
         padding: 0;
@@ -54,7 +54,7 @@
         }
     }
 
-    {{/* 전체 배치용 컨테이너 div */}}
+    /* 전체 배치용 컨테이너 div */
     .container {
         width: 100vw;
         display: grid;
@@ -64,7 +64,7 @@
         padding-x: 20px;
     }
 
-    {{/* 작은 페이지 담은 div */}}
+    /* 작은 페이지 담은 div */
     .small-page-container {
         display: flex;
         flex-direction: column;
@@ -72,6 +72,10 @@
 
     .small-page-container .small-page-wrapper {
         aspect-ratio: 16 / 9;
+
+        /* Firefox 계열 브라우저에서 aspect-ratio가 작동하도록 하는 보조 css */
+        min-height: 0; 
+        min-width: 0;
     }
 
     .small-page-container .small-page-wrapper iframe {
