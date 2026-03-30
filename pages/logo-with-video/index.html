@@ -1,0 +1,93 @@
+<body>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* 배경 컨테이너 */
+    .container {
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        z-index: -1;
+        background: #000;
+    }
+
+    /* 비디오 화면 비율 유지 및 꽉 채우기 */
+    .video-container {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none; /* 비디오 클릭 방지 (스크롤/버튼 클릭 가능하게) */
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 50%; left: 50%;
+        width: 100vw;
+        height: 56.25vw; /* 16:9 비율 (9 / 16 * 100) */
+        min-height: 100vh;
+        min-width: 177.77vh; /* 16:9 비율 (16 / 9 * 100) */
+        transform: translate(-50%, -50%);
+    }
+
+    {{/* 중앙 이미지 컨테이너 */}}
+    .center-image-container {
+        position: fixed;
+        left: 0%;
+        top: 0%;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5);   
+        z-index: 1;
+    }
+
+    .center-image-container div {
+        width: 300px;
+        max-width: 50%;
+        height: 100%;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 2;
+    }
+
+    @media (prefers-color-scheme: light) {
+        .center-image-container div {
+            background-image: url('../../public/images/logo-black-title-black-subtitle.png');
+        }
+    }
+
+    @media (prefers-color-scheme: dark) {
+        .center-image-container div {
+            background-image: url('../../public/images/logo-white-title-white-subtitle.png');
+        }
+    }
+</style>
+<div class="container">
+    <div class="video-container" id="video-container">
+        {{/* 유튜브 임베딩 들어갈 자리 */}}
+    </div>
+    <div class='center-image-container'>
+        <div id='center-image'></div>
+    </div>
+</div>
+<script>
+    // 유튜브 영상이 로드된 후에 iframe 요소를 가져와야 함
+    window.addEventListener('load', () => {
+        const url = new URL(document.URL);
+        const searchParams = url.searchParams;
+        const videoId = searchParams.get('videoId') || "jnLSYfObARA";
+
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&controls=0&disablekb=1&rel=0&modestbranding=1&playlist=${videoId}`;
+        iframe.frameBorder = "0";
+        iframe.allow = "autoplay; encrypted-media";
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.appendChild(iframe);
+    });
+</script>
+</body>
