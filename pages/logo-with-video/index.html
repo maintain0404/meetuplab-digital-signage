@@ -63,6 +63,15 @@
             background-image: url('../../public/images/logo-white-title-white-subtitle.png');
         }
     }
+
+    /* Theme query parameter overrides */
+    body[data-theme="light"] .center-image-container div {
+        background-image: url('../../public/images/logo-black-title-black-subtitle.png');
+    }
+
+    body[data-theme="dark"] .center-image-container div {
+        background-image: url('../../public/images/logo-white-title-white-subtitle.png');
+    }
 </style>
 <div class="container">
     <div class="video-container" id="video-container">
@@ -73,6 +82,16 @@
     </div>
 </div>
 <script>
+    // Apply theme from query parameter
+    const applyTheme = () => {
+        const url = new URL(document.URL);
+        const theme = url.searchParams.get('theme');
+        if (theme === 'light' || theme === 'dark') {
+            document.body.setAttribute('data-theme', theme);
+        }
+    };
+    applyTheme();
+
     // 유튜브 영상이 로드된 후에 iframe 요소를 가져와야 함
     window.addEventListener('load', () => {
         const url = new URL(document.URL);

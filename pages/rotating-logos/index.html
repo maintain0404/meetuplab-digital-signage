@@ -21,6 +21,17 @@
         }
     }
 
+    /* Theme query parameter overrides */
+    body[data-theme="light"] {
+        background-color: white;
+        color: black;
+    }
+
+    body[data-theme="dark"] {
+        background-color: black;
+        color: white;
+    }
+
     /* 전체 배치용 컨테이너 div */
     .container {
         width: 100vw;
@@ -63,6 +74,15 @@
         }
     }
 
+    /* Theme query parameter overrides for logo-container */
+    body[data-theme="light"] .logo-container div {
+        background-image: url('../../public/images/logo-black-title-black-subtitle.png');
+    }
+
+    body[data-theme="dark"] .logo-container div {
+        background-image: url('../../public/images/logo-white-title-white-subtitle.png');
+    }
+
     /* 중앙 이미지 컨테이너 */
     .center-image-container {
         position: fixed;
@@ -98,6 +118,15 @@
         }
     }
 
+    /* Theme query parameter overrides for center-image-container */
+    body[data-theme="light"] .center-image-container div {
+        background-image: url('../../public/images/logo-black-title-black-subtitle.png');
+    }
+
+    body[data-theme="dark"] .center-image-container div {
+        background-image: url('../../public/images/logo-white-title-white-subtitle.png');
+    }
+
     @keyframes rotate_image {
         100% {
             transform: rotate(360deg);
@@ -118,6 +147,16 @@
 <div id="container" class="container">
 </div>
 <script>
+    // Apply theme from query parameter
+    const applyTheme = () => {
+        const url = new URL(document.URL);
+        const theme = url.searchParams.get('theme');
+        if (theme === 'light' || theme === 'dark') {
+            document.body.setAttribute('data-theme', theme);
+        }
+    };
+    applyTheme();
+
     let blockWidth = 80; // px
     let blockHeight = blockWidth // px
 
