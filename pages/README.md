@@ -27,7 +27,7 @@ URL: ./rotating-logos/index.html?파라미터명=값
 #### Rotating Logos
 | 파라미터 | 가능한 값 | 설명 |
 |---------|---------|------|
-| `rotating-theme` | `light`, `dark`, (빈 값) | 표시 모드 (비어있으면 시스템 기본값) |
+| `theme` | `light`, `dark`, (빈 값) | 표시 모드 (비어있으면 시스템 기본값) |
 
 **예시 URL:**
 ```
@@ -37,12 +37,12 @@ URL: ./rotating-logos/index.html?파라미터명=값
 #### Logo with Video
 | 파라미터 | 가능한 값 | 설명 |
 |---------|---------|------|
-| `video-id` | YouTube 동영상 ID | 재생할 유튜브 동영상 |
-| `video-theme` | `light`, `dark`, (빈 값) | 표시 모드 (비어있으면 시스템 기본값) |
+| `videoId` | YouTube 동영상 ID | 재생할 유튜브 동영상 |
+| `theme` | `light`, `dark`, (빈 값) | 표시 모드 (비어있으면 시스템 기본값) |
 
 **예시 URL:**
 ```
-./logo-with-video/index.html?video-id=abc123&video-theme=dark
+./logo-with-video/index.html?videoId=abc123&theme=dark
 ```
 
 ## 새로운 섹션 추가하기
@@ -80,7 +80,7 @@ URL: ./rotating-logos/index.html?파라미터명=값
                 파라미터 이름
                 <span class="form-help">설명</span>
             </label>
-            <select id="new-param" name="new-param">
+            <select id="new-param" name="newParam">
                 <option value="">기본값</option>
                 <option value="option1">옵션 1</option>
                 <option value="option2">옵션 2</option>
