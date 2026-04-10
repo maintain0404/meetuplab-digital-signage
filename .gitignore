@@ -1,1 +1,40 @@
 __variables.css
+
+# OpenTofu / Terraform
+infra/.terraform/
+# infra/.terraform.lock.hcl  # 버전 관리에 포함되어야 함!
+infra/*.tfvars
+infra/*.tfvars.json
+!infra/terraform.tfvars.example
+infra/*.tfstate
+infra/*.tfstate.*
+infra/.terraformrc
+infra/override.tf
+infra/override.tf.json
+infra/*_override.tf
+infra/*_override.tf.json
+infra/.env
+infra/.env.local
+infra/tfplan
+infra/tfplan.*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+.venv/
+.pytest_cache/
