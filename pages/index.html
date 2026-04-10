@@ -10,11 +10,11 @@
     <div class="small-page-container">
         <h3>Rotating Logos</h3>
         <div class="small-page-wrapper">
-            <iframe 
+            <iframe
                 id="rotating-logos"
-                src="./rotating-logos/index.html" 
-                frameborder="0" 
-                allow="autoplay; encrypted-media" 
+                src="./rotating-logos/index.html"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
                 allowfullscreen
                 referrerpolicy="strict-origin-when-cross-origin">
             </iframe>
@@ -41,14 +41,82 @@
         </div>
     </div>
 
+    <div class="small-page-container">
+        <h3>Logo Tunnel</h3>
+        <div class="small-page-wrapper">
+            <iframe
+                id="logo-tunnel"
+                src="./logo-tunnel/index.html"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="page-description">
+            <p>로고들이 만드는 3D 원통 터널을 끝없이 날아가는 웜홀 화면입니다. 중앙 히어로 로고가 상시 빛나며, 케이지 라인·별빛·글로우링이 몰입감을 높입니다.</p>
+        </div>
+        <div class="page-editor">
+            <h4>화면 설정</h4>
+            <p class="editor-description">아래 옵션을 선택하여 화면을 커스터마이징할 수 있습니다.</p>
+            <div class="form-group">
+                <label for="theme">
+                    표시 모드
+                    <span class="form-help">화면을 밝거나 어둡게 표시합니다</span>
+                </label>
+                <select name="theme">
+                    <option value="">시스템 기본값</option>
+                    <option value="light">밝음</option>
+                    <option value="dark">어두움</option>
+                </select>
+            </div>
+            <button onclick="applySettings(this, false)" class="editor-button">미리보기</button>
+            <button onclick="applySettings(this, true)" class="editor-button">전체화면으로</button>
+        </div>
+    </div>
+
+    <div class="small-page-container">
+        <h3>Logo Vinyl</h3>
+        <div class="small-page-wrapper">
+            <iframe
+                id="logo-vinyl"
+                src="./logo-vinyl/index.html"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="page-description">
+            <p>회전하는 LP 레코드판의 중앙 라벨에 로고가 박혀있고, 톤암이 좌우로 스윕하며 사운드 웨이브가 퍼져나가는 화면입니다. 라벨 안쪽 로고는 역회전으로 항상 정면을 유지합니다.</p>
+        </div>
+        <div class="page-editor">
+            <h4>화면 설정</h4>
+            <p class="editor-description">아래 옵션을 선택하여 화면을 커스터마이징할 수 있습니다.</p>
+            <div class="form-group">
+                <label for="theme">
+                    표시 모드
+                    <span class="form-help">화면을 밝거나 어둡게 표시합니다</span>
+                </label>
+                <select name="theme">
+                    <option value="">시스템 기본값</option>
+                    <option value="light">밝음</option>
+                    <option value="dark">어두움</option>
+                </select>
+            </div>
+            <button onclick="applySettings(this, false)" class="editor-button">미리보기</button>
+            <button onclick="applySettings(this, true)" class="editor-button">전체화면으로</button>
+        </div>
+    </div>
+
    <div class="small-page-container">
         <h3>Logo with Video</h3>
         <div class="small-page-wrapper">
-            <iframe 
+            <iframe
                 id="logo-with-video"
-                src="./logo-with-video/index.html" 
-                frameborder="0" 
-                allow="autoplay; encrypted-media" 
+                src="./logo-with-video/index.html"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
                 allowfullscreen
                 referrerpolicy="strict-origin-when-cross-origin">
             </iframe>
@@ -114,7 +182,7 @@
 
     .small-page-container .small-page-wrapper {
         aspect-ratio: 16 / 9;
-        min-height: 0; 
+        min-height: 0;
         min-width: 0;
         border-radius: 6px;
         overflow: hidden;
@@ -176,7 +244,7 @@
     }
 </style>
 <script>
-    const applySettings = (button, fullscreen = false) => {
+    const _applySettings = (button, fullscreen = false) => {
         // 버튼의 부모 컨테이너 찾기
         const container = button.closest('.small-page-container');
 
@@ -185,10 +253,10 @@
 
         // 기존 iframe src에서 기본 URL만 추출 (쿼리 제거)
         const baseUrl = iframe.src.split('?')[0]; // 기존 쿼리 제거
-        
+
         // 컨테이너 내의 모든 input과 select 요소 찾기
         const inputs = container.querySelectorAll('input[name], select[name]');
-        
+
         // 모든 input/select의 name을 쿼리 파라미터로 추가
         const params = new URLSearchParams();
         inputs.forEach(input => {
@@ -197,15 +265,15 @@
                 params.append(input.name, value);
             }
         });
-        
+
         let url = baseUrl;
         const queryString = params.toString();
         if (queryString) {
             url += `?${queryString}`;
         }
-        
+
         iframe.src = url;
-        
+
         if (fullscreen) {
             if (iframe.requestFullscreen) {
                 iframe.requestFullscreen();

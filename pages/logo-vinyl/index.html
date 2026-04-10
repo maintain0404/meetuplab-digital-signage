@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Vinyl</title>
+    <style>
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    /* ---------- Theme: light / dark ---------- */
+    @media (prefers-color-scheme: light) {
+        body {
+            background:
+                radial-gradient(circle at 30% 20%, #fff4e0 0%, #f5e6d3 40%, #e9d4ba 100%);
+            color: #2a1a0a;
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        body {
+            background:
+                radial-gradient(circle at 30% 20%, #1a1625 0%, #0d0b15 50%, #05040a 100%);
+            color: #fff;
+        }
+    }
+    body[data-theme="light"] {
+        background:
+            radial-gradient(circle at 30% 20%, #fff4e0 0%, #f5e6d3 40%, #e9d4ba 100%);
+        color: #2a1a0a;
+    }
+    body[data-theme="dark"] {
+        background:
+            radial-gradient(circle at 30% 20%, #1a1625 0%, #0d0b15 50%, #05040a 100%);
+        color: #fff;
+    }
+
+    /* ---------- Ambient floating dust particles ---------- */
+    .dust {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        z-index: 0;
+    }
+    .dust span {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.35;
+        animation: dustFloat linear infinite;
+    }
+    @keyframes dustFloat {
+        0%   { transform: translateY(110vh) translateX(0) scale(0.6); opacity: 0; }
+        10%  { opacity: 0.5; }
+        90%  { opacity: 0.5; }
+        100% { transform: translateY(-10vh) translateX(60px) scale(1); opacity: 0; }
+    }
+
+    /* ---------- Stage ---------- */
+    .stage {
+        position: relative;
+        width: min(90vmin, 900px);
+        height: min(90vmin, 900px);
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* ---------- Record (the vinyl disc) ---------- */
+    .record {
+        position: relative;
+        width: 78%;
+        height: 78%;
+        border-radius: 50%;
+        background:
+            /* outer edge highlight */
+            radial-gradient(circle at 50% 50%,
+                transparent 48%,
+                rgba(255,255,255,0.08) 49%,
+                transparent 50%),
+            /* grooves */
+            repeating-radial-gradient(circle at center,
+                #0a0a0a 0px,
+                #141414 1px,
+                #0a0a0a 2px,
+                #181818 3px),
+            #0a0a0a;
+        box-shadow:
+            0 30px 80px rgba(0,0,0,0.55),
+            0 10px 30px rgba(0,0,0,0.4),
+            inset 0 0 40px rgba(0,0,0,0.8);
+        animation: spin 6s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+    }
+
+    /* Rotating specular highlight that sweeps the vinyl */
+    .record::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: conic-gradient(
+            from 0deg,
+            rgba(255,255,255,0) 0deg,
+            rgba(255,255,255,0.18) 25deg,
+            rgba(255,255,255,0) 60deg,
+            rgba(255,255,255,0) 180deg,
+            rgba(255,255,255,0.10) 210deg,
+            rgba(255,255,255,0) 250deg
+        );
+        mix-blend-mode: screen;
+        pointer-events: none;
+    }
+
+    /* Small center hole detail is replaced by the label */
+
+    /* ---------- Label (colored sticker that holds the logo) ---------- */
+    .label {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 36%;
+        height: 36%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+            radial-gradient(circle at 30% 30%, #fff 0%, #ffe9c9 50%, #f5c98a 100%);
+        box-shadow:
+            inset 0 0 20px rgba(0,0,0,0.15),
+            0 0 30px rgba(255, 200, 120, 0.25);
+    }
+    body[data-theme="dark"] .label,
+    body:not([data-theme="light"]) .label {
+    }
+    @media (prefers-color-scheme: dark) {
+        body:not([data-theme="light"]) .label {
+            background:
+                radial-gradient(circle at 30% 30%, #fff 0%, #fdecd1 50%, #e9b46a 100%);
+            box-shadow:
+                inset 0 0 20px rgba(0,0,0,0.2),
+                0 0 50px rgba(255, 180, 80, 0.35);
+        }
+    }
+
+    .label img {
+        width: 78%;
+        height: 78%;
+        object-fit: contain;
+        /* keep logo readable while label spins */
+        animation: counterspin 6s linear infinite;
+    }
+    @keyframes counterspin {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(-360deg); }
+    }
+
+    /* The center spindle hole */
+    .spindle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #000;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 0 2px rgba(255,255,255,0.15), inset 0 0 6px rgba(0,0,0,0.9);
+        z-index: 5;
+    }
+
+    /* ---------- Tonearm ---------- */
+    .tonearm {
+        position: absolute;
+        top: 4%;
+        right: 2%;
+        width: 52%;
+        height: 8px;
+        transform-origin: calc(100% - 20px) 50%;
+        transform: rotate(-28deg);
+        animation: armSweep 30s ease-in-out infinite alternate;
+        pointer-events: none;
+        z-index: 4;
+    }
+
+    @keyframes armSweep {
+        0%   { transform: rotate(-32deg); }
+        100% { transform: rotate(-12deg); }
+    }
+
+    .tonearm .arm {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 30px;
+        height: 6px;
+        transform: translateY(-50%);
+        background: linear-gradient(180deg, #d9d9d9 0%, #8a8a8a 50%, #4a4a4a 100%);
+        border-radius: 3px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    .tonearm .pivot {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #e0e0e0, #6a6a6a 60%, #2a2a2a);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    }
+    .tonearm .pivot::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background: #111;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .tonearm .head {
+        position: absolute;
+        top: 50%;
+        left: -18px;
+        width: 36px;
+        height: 22px;
+        transform: translateY(-50%) rotate(20deg);
+        background: linear-gradient(180deg, #333, #0a0a0a);
+        border-radius: 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+    .tonearm .head::after {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        left: 6px;
+        width: 3px;
+        height: 8px;
+        background: #bbb;
+    }
+
+    /* ---------- Sound waves emanating from needle ---------- */
+    .waves {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        z-index: 2;
+        pointer-events: none;
+    }
+    .waves .ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40%;
+        height: 40%;
+        border: 2px solid currentColor;
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+        animation: waveOut 4s ease-out infinite;
+    }
+    .waves .ring:nth-child(2) { animation-delay: 1.3s; }
+    .waves .ring:nth-child(3) { animation-delay: 2.6s; }
+    @keyframes waveOut {
+        0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 0.0; }
+        10%  { opacity: 0.35; }
+        100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+    }
+
+    /* ---------- Equalizer strip at bottom ---------- */
+    .eq {
+        position: fixed;
+        left: 50%;
+        bottom: 5vh;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 6px;
+        align-items: flex-end;
+        height: 44px;
+        z-index: 3;
+        opacity: 0.6;
+    }
+    .eq span {
+        display: block;
+        width: 6px;
+        background: currentColor;
+        border-radius: 3px;
+        animation: eqBounce 1.1s ease-in-out infinite;
+    }
+    .eq span:nth-child(1)  { animation-delay: 0.00s; }
+    .eq span:nth-child(2)  { animation-delay: 0.10s; }
+    .eq span:nth-child(3)  { animation-delay: 0.20s; }
+    .eq span:nth-child(4)  { animation-delay: 0.05s; }
+    .eq span:nth-child(5)  { animation-delay: 0.25s; }
+    .eq span:nth-child(6)  { animation-delay: 0.15s; }
+    .eq span:nth-child(7)  { animation-delay: 0.30s; }
+    .eq span:nth-child(8)  { animation-delay: 0.12s; }
+    .eq span:nth-child(9)  { animation-delay: 0.22s; }
+    .eq span:nth-child(10) { animation-delay: 0.08s; }
+    .eq span:nth-child(11) { animation-delay: 0.28s; }
+    .eq span:nth-child(12) { animation-delay: 0.18s; }
+    @keyframes eqBounce {
+        0%, 100% { height: 8px; }
+        50%      { height: 40px; }
+    }
+
+    /* ---------- Corner RPM label ---------- */
+    .rpm {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        font-size: 12px;
+        letter-spacing: 2px;
+        opacity: 0.55;
+        z-index: 3;
+    }
+    .rpm::before {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: #ff3030;
+        border-radius: 50%;
+        margin-right: 8px;
+        vertical-align: middle;
+        animation: blinkRec 1.5s ease-in-out infinite;
+    }
+    @keyframes blinkRec {
+        0%, 100% { opacity: 1; }
+        50%      { opacity: 0.2; }
+    }
+    </style>
+</head>
+<body>
+    <div class="dust" id="dust"></div>
+
+    <div class="rpm">33 ⅓ RPM · NOW PLAYING</div>
+
+    <div class="stage">
+        <div class="record">
+            <div class="label">
+                <img id="labelLogo" alt="Logo">
+            </div>
+        </div>
+        <div class="spindle"></div>
+
+        <div class="waves">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+        </div>
+
+        <div class="tonearm">
+            <div class="pivot"></div>
+            <div class="arm"></div>
+            <div class="head"></div>
+        </div>
+    </div>
+
+    <div class="eq" aria-hidden="true">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span>
+    </div>
+
+    <script>
+        // ---------- Theme handling ----------
+    const applyTheme = () => {
+        const url = new URL(document.URL);
+        const theme = url.searchParams.get('theme');
+        if (theme === 'light' || theme === 'dark') {
+            document.body.setAttribute('data-theme', theme);
+        }
+    };
+    applyTheme();
+
+    const isDark = () => {
+        const t = document.body.getAttribute('data-theme');
+        if (t === 'dark') return true;
+        if (t === 'light') return false;
+        return matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+
+    const logoPath = isDark()
+        ? '../../public/images/logo-white-title-white-subtitle.png'
+        : '../../public/images/logo-black-title-black-subtitle.png';
+    document.getElementById('labelLogo').src = logoPath;
+
+    // ---------- Floating dust particles ----------
+    const dust = document.getElementById('dust');
+    const DUST_COUNT = 40;
+    for (let i = 0; i < DUST_COUNT; i++) {
+        const s = document.createElement('span');
+        const duration = 12 + Math.random() * 18;
+        const delay = -Math.random() * duration;
+        const size = 1 + Math.random() * 3;
+        s.style.left = `${Math.random() * 100}vw`;
+        s.style.width = `${size}px`;
+        s.style.height = `${size}px`;
+        s.style.animationDuration = `${duration}s`;
+        s.style.animationDelay = `${delay}s`;
+        s.style.opacity = (0.15 + Math.random() * 0.4).toString();
+        dust.appendChild(s);
+    }
+    </script>
+</body>
+</html>

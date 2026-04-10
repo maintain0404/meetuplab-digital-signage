@@ -13,16 +13,11 @@
 
 ### 핵심 원칙
 
-**HTML input/select의 `name` 어트리뷰트 = 쿼리 파라미터명**
-
-```html
-<select id="theme" name="theme">
-    <option value="dark">어두움</option>
-</select>
-<!-- → ./page/index.html?theme=dark -->
-```
-
-JavaScript 수정 없이 HTML만 추가하면 자동으로 쿼리 파라미터 기능이 작동합니다.
+1. 반드시 **public/images 하에 로고 파일**을 적극적으로 활용하고 로고가 굉장히 슈퍼 잘 돋보이는 화면을 구현해야 합니다.
+2. 텍스트는 로고에 적힌 문구만 활용해주세요.
+3. 다크모드 라이트모드를 둘 다 만들어주세요
+4. 아무런 외부 인터렉션 없이도 화면에 움직임이 있어야 합니다.
+5. 이 파일의 화면 목록에도 추가해주세요
 
 ### 새로운 섹션 추가
 
@@ -44,4 +39,7 @@ JavaScript 수정 없이 HTML만 추가하면 자동으로 쿼리 파라미터 �
 
 ### 테스트
 pytest를 사용합니다. `mise run test`로 실행합니다.
+
+### 포매팅
+ruff를 사용합니다. `mise run format`로 실행합니다.
 

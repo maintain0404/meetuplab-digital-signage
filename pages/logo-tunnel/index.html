@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Tunnel</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+                                                                                html, body {
+                                                                                    width: 100vw;
+                                                                                    height: 100vh;
+                                                                                    overflow: hidden;
+                                                                                    background: #000;
+                                                                                }
+
+                                                                                canvas {
+                                                                                    display: block;
+                                                                                    position: fixed;
+                                                                                    inset: 0;
+                                                                                }
+
+                                                                                /* Central hero logo — stays sharp in the foreground */
+                                                                                #hero-wrap {
+                                                                                    position: fixed;
+                                                                                    top: 50%;
+                                                                                    left: 50%;
+                                                                                    transform: translate(-50%, -50%);
+                                                                                    z-index: 10;
+                                                                                    animation: heroPulse 3.6s ease-in-out infinite;
+                                                                                }
+                                                                                #hero {
+                                                                                    display: block;
+                                                                                    width: clamp(260px, 30vw, 460px);
+                                                                                    pointer-events: none;
+                                                                                    filter: drop-shadow(0 0 40px rgba(255,255,255,0.35));
+                                                                                }
+                                                                                body.light #hero {
+                                                                                    filter: drop-shadow(0 0 40px rgba(0,0,0,0.25));
+                                                                                }
+
+                                                                                @keyframes heroPulse {
+                                                                                    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+                                                                                    50%       { transform: translate(-50%, -50%) scale(1.05); }
+                                                                                }
+
+                                                                                /* Speed-line vignette to sell the motion */
+                                                                                #vignette {
+                                                                                    position: fixed;
+                                                                                    inset: 0;
+                                                                                    pointer-events: none;
+                                                                                    z-index: 5;
+                                                                                    background: radial-gradient(
+                                                                                        ellipse 55% 55% at 50% 50%,
+                                                                                        transparent 30%,
+                                                                                        rgba(0,0,0,0.70) 100%
+                                                                                    );
+                                                                                }
+
+                                                                                /* Dark / Light variants */
+                                                                                body.light { background: #f0ede8; }
+                                                                                body.light #vignette {
+                                                                                    background: radial-gradient(
+                                                                                        ellipse 55% 55% at 50% 50%,
+                                                                                        transparent 30%,
+                                                                                        rgba(230,225,215,0.80) 100%
+                                                                                    );
+                                                                                }
+                                                                                body.light #hero {
+                                                                                    filter: drop-shadow(0 0 40px rgba(0,0,0,0.25));
+                                                                                }
+    </style>
+</head>
+<body>
+    <canvas id="c"></canvas>
+    <div id="vignette"></div>
+    <div id="hero-wrap">
+        <img id="hero" alt="Logo">
+    </div>
+
+    <script>
+    (() => {
+                                            /* ── Theme ─────────────────────────────────────────────────── */
+                                            const params = new URLSearchParams(location.search);
+                                            const themeParam = params.get('theme');
+                                            const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+                                            const dark = themeParam === 'dark' || (!themeParam && prefersDark) || themeParam !== 'light';
+
+                                            if (!dark) document.body.classList.add('light');
+
+                                            const logoSrc = dark
+                                                ? '../../public/images/logo-white-title-white-subtitle.png'
+                                                : '../../public/images/logo-black-title-black-subtitle.png';
+
+                                            document.getElementById('hero').src = logoSrc;
+
+                                            /* ── Canvas setup ───────────────────────────────────────────── */
+                                            const canvas = document.getElementById('c');
+                                            const ctx    = canvas.getContext('2d');
+                                            let W, H, CX, CY;
+
+                                            const resize = () => {
+                                                W = canvas.width  = window.innerWidth;
+                                                H = canvas.height = window.innerHeight;
+                                                CX = W / 2;
+                                                CY = H / 2;
+                                            };
+                                            resize();
+                                            window.addEventListener('resize', resize);
+
+                                            /* ── Logo image ─────────────────────────────────────────────── */
+                                            const logoImg = new Image();
+                                            logoImg.src = logoSrc;
+
+                                            /* ── Tunnel config ──────────────────────────────────────────── */
+                                            const RINGS          = 14;       // number of logo rings in the tunnel
+                                            const LOGOS_PER_RING = 5;        // logos arranged around each ring
+                                            const WORLD_RADIUS   = 320;      // ring radius in world units
+                                            const Z_NEAR         = 60;       // clip plane (too close → skip)
+                                            const Z_FAR          = 3200;     // spawn distance
+                                            const FOV            = 650;      // perspective focal length
+                                            const LOGO_W         = 190;      // logo width in world units
+                                            const LOGO_H         = 80;       // logo height in world units
+                                            const BASE_SPEED     = 9;        // z-units per frame
+                                            const TWIST_PER_RING = Math.PI / LOGOS_PER_RING; // helical twist
+
+                                            /* ── Rings state ─────────────────────────────────────────────  */
+                                            // Evenly distribute rings from near to far at startup
+                                            const rings = Array.from({ length: RINGS }, (_, i) => ({
+                                                z:        Z_NEAR + (Z_FAR - Z_NEAR) * (i / RINGS),
+                                                baseAngle: (i * TWIST_PER_RING),
+                                            }));
+
+                                            /* ── Stars ───────────────────────────────────────────────────  */
+                                            const STAR_COUNT = 220;
+                                            const stars = Array.from({ length: STAR_COUNT }, () => ({
+                                                x: (Math.random() - 0.5) * 2,   // normalized [-1, 1]
+                                                y: (Math.random() - 0.5) * 2,
+                                                z: Math.random(),                // [0, 1]
+                                                r: 0.5 + Math.random() * 1.5,
+                                            }));
+
+                                            /* ── Helpers ─────────────────────────────────────────────────  */
+                                            const project = (wx, wy, wz) => {
+                                                const s = FOV / wz;
+                                                return { sx: CX + wx * s, sy: CY + wy * s, scale: s };
+                                            };
+
+                                            /* ── Main loop ───────────────────────────────────────────────  */
+                                            let t = 0;
+
+                                            const frame = () => {
+                                                t++;
+
+                                                /* Speed oscillates gently so it feels like breathing */
+                                                const speed = BASE_SPEED * (0.7 + 0.5 * Math.sin(t * 0.012));
+
+                                                ctx.clearRect(0, 0, W, H);
+
+                                                /* Background fill */
+                                                if (dark) {
+                                                    ctx.fillStyle = '#000005';
+                                                    ctx.fillRect(0, 0, W, H);
+                                                } else {
+                                                    ctx.fillStyle = '#f0ede8';
+                                                    ctx.fillRect(0, 0, W, H);
+                                                }
+
+                                                /* ── Stars ── */
+                                                for (const s of stars) {
+                                                    s.z -= speed * 0.00025;
+                                                    if (s.z <= 0) s.z = 1;
+                                                    const sx = CX + s.x * W * 0.5 / s.z;
+                                                    const sy = CY + s.y * H * 0.5 / s.z;
+                                                    const radius = s.r * (1 - s.z) * 2.5;
+                                                    const alpha  = Math.min(1, (1 - s.z) * 1.4);
+                                                    ctx.beginPath();
+                                                    ctx.arc(sx, sy, Math.max(0.3, radius), 0, Math.PI * 2);
+                                                    ctx.fillStyle = dark
+                                                        ? `rgba(255,255,255,${alpha * 0.7})`
+                                                        : `rgba(80,60,30,${alpha * 0.4})`;
+                                                    ctx.fill();
+                                                }
+
+                                                /* ── Connection lines between rings (cage effect) ── */
+                                                // Sort far → near so closer rings draw on top
+                                                const sorted = [...rings].sort((a, b) => b.z - a.z);
+
+                                                // Find adjacent ring pairs
+                                                for (let ri = 0; ri < sorted.length - 1; ri++) {
+                                                    const rA = sorted[ri];
+                                                    const rB = sorted[ri + 1];
+                                                    if (rA.z <= Z_NEAR || rB.z <= Z_NEAR) continue;
+
+                                                    for (let k = 0; k < LOGOS_PER_RING; k++) {
+                                                        const angleA = rA.baseAngle + (k / LOGOS_PER_RING) * Math.PI * 2;
+                                                        const angleB = rB.baseAngle + (k / LOGOS_PER_RING) * Math.PI * 2;
+
+                                                        const pA = project(Math.cos(angleA) * WORLD_RADIUS, Math.sin(angleA) * WORLD_RADIUS, rA.z);
+                                                        const pB = project(Math.cos(angleB) * WORLD_RADIUS, Math.sin(angleB) * WORLD_RADIUS, rB.z);
+
+                                                        const alpha = Math.min(
+                                                            (1 - rA.z / Z_FAR) * 0.25,
+                                                            (1 - rB.z / Z_FAR) * 0.25
+                                                        );
+                                                        ctx.beginPath();
+                                                        ctx.moveTo(pA.sx, pA.sy);
+                                                        ctx.lineTo(pB.sx, pB.sy);
+                                                        ctx.strokeStyle = dark
+                                                            ? `rgba(255,255,255,${alpha})`
+                                                            : `rgba(0,0,0,${alpha})`;
+                                                        ctx.lineWidth = 0.5;
+                                                        ctx.stroke();
+                                                    }
+                                                }
+
+                                                /* ── Rings of logos ── */
+                                                if (logoImg.complete && logoImg.naturalWidth > 0) {
+                                                    for (const ring of sorted) {
+                                                        // Advance ring toward camera
+                                                        ring.z -= speed;
+                                                        if (ring.z < Z_NEAR) {
+                                                            ring.z = Z_FAR;
+                                                        }
+
+                                                        const progress = 1 - (ring.z - Z_NEAR) / (Z_FAR - Z_NEAR); // 0=far, 1=near
+                                                        // 3제곱 커브: 멀리 있을 때 거의 투명, 가까울수록 빠르게 불투명
+                                                        const alpha = progress ** 3;
+                                                        if (alpha < 0.01) continue;
+
+                                                        for (let k = 0; k < LOGOS_PER_RING; k++) {
+                                                            const angle = ring.baseAngle + (k / LOGOS_PER_RING) * Math.PI * 2;
+                                                            const wx    = Math.cos(angle) * WORLD_RADIUS;
+                                                            const wy    = Math.sin(angle) * WORLD_RADIUS;
+                                                            const { sx, sy, scale } = project(wx, wy, ring.z);
+
+                                                            const lw = LOGO_W * scale;
+                                                            const lh = LOGO_H * scale;
+
+                                                            // Only draw if on screen
+                                                            if (sx + lw / 2 < 0 || sx - lw / 2 > W) continue;
+                                                            if (sy + lh / 2 < 0 || sy - lh / 2 > H) continue;
+
+                                                            ctx.globalAlpha = alpha * (dark ? 0.92 : 0.80);
+                                                            ctx.drawImage(logoImg, sx - lw / 2, sy - lh / 2, lw, lh);
+                                                        }
+                                                    }
+                                                    ctx.globalAlpha = 1;
+                                                }
+
+                                                /* ── Tunnel mouth glow ring ── */
+                                                const glowR  = WORLD_RADIUS * (FOV / Z_NEAR) * 0.8;
+                                                const glow   = ctx.createRadialGradient(CX, CY, glowR * 0.6, CX, CY, glowR);
+                                                if (dark) {
+                                                    glow.addColorStop(0, 'rgba(120,80,255,0.18)');
+                                                    glow.addColorStop(0.5,'rgba(80,40,180,0.08)');
+                                                    glow.addColorStop(1, 'rgba(0,0,0,0)');
+                                                } else {
+                                                    glow.addColorStop(0, 'rgba(255,160,60,0.22)');
+                                                    glow.addColorStop(0.5,'rgba(255,120,30,0.09)');
+                                                    glow.addColorStop(1, 'rgba(240,230,210,0)');
+                                                }
+                                                ctx.fillStyle = glow;
+                                                ctx.beginPath();
+                                                ctx.arc(CX, CY, glowR, 0, Math.PI * 2);
+                                                ctx.fill();
+
+                                                requestAnimationFrame(frame);
+                                            };
+
+                                            logoImg.onload  = () => requestAnimationFrame(frame);
+                                            logoImg.onerror = () => requestAnimationFrame(frame); // fallback
+                                        })();
+    </script>
+</body>
+</html>
