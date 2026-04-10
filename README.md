@@ -8,6 +8,7 @@
 소스 코드는 src 디렉토리 안에 정의되어 있습니다.
 - rotating-logos: 정중앙에 크게 로고가 있고, 배경으로 작은 로고 여러개가 제자리에서 전부 다른 무작위 속도로 회전하는 화면, [디렉토리 링크](src/rotating-logos)
 - logo-with-video: 정중앙에 크게 로고가 있고, 배경으로 비디오가 있는 화면, [디렉토리 링크](src/logo-with-video)
+- scrolling-logo: 여러 열의 로고가 각기 다른 속도로 수평 이동하는 배경 위에, 잊을 수 없는 대형 히어로 로고가 부유하는 화면, [디렉토리 링크](pages/scrolling-logo)
 
 ## 개발자 & LLM용 개발 가이드
 

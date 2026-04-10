@@ -34,6 +34,16 @@ URL: ./rotating-logos/index.html?파라미터명=값
 ./rotating-logos/index.html?rotating-theme=dark
 ```
 
+#### Scrolling Logo
+| 파라미터 | 가능한 값 | 설명 |
+|---------|---------|------|
+| `theme` | `light`, `dark`, (빈 값) | 표시 모드 (비어있으면 시스템 기본값) |
+
+**예시 URL:**
+```
+./scrolling-logo/index.html?theme=dark
+```
+
 #### Logo with Video
 | 파라미터 | 가능한 값 | 설명 |
 |---------|---------|------|

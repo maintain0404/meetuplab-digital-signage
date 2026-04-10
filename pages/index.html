@@ -109,6 +109,40 @@
         </div>
     </div>
 
+    <div class="small-page-container">
+        <h3>Scrolling Logo</h3>
+        <div class="small-page-wrapper">
+            <iframe
+                id="scrolling-logo"
+                src="./scrolling-logo/index.html"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                referrerpolicy="strict-origin-when-cross-origin">
+            </iframe>
+        </div>
+        <div class="page-description">
+            <p>여러 열의 로고가 각기 다른 속도로 수평 이동하는 배경 위에, 잊을 수 없는 대형 히어로 로고가 부유하는 화면입니다.</p>
+        </div>
+        <div class="page-editor">
+            <h4>화면 설정</h4>
+            <p class="editor-description">아래 옵션을 선택하여 화면을 커스터마이징할 수 있습니다.</p>
+            <div class="form-group">
+                <label for="theme">
+                    표시 모드
+                    <span class="form-help">화면을 밝거나 어둡게 표시합니다</span>
+                </label>
+                <select name="theme">
+                    <option value="">시스템 기본값</option>
+                    <option value="light">밝음</option>
+                    <option value="dark">어두움</option>
+                </select>
+            </div>
+            <button onclick="applySettings(this, false)" class="editor-button">미리보기</button>
+            <button onclick="applySettings(this, true)" class="editor-button">전체화면으로</button>
+        </div>
+    </div>
+
    <div class="small-page-container">
         <h3>Logo with Video</h3>
         <div class="small-page-wrapper">
