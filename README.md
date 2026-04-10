@@ -9,3 +9,39 @@
 - rotating-logos: 정중앙에 크게 로고가 있고, 배경으로 작은 로고 여러개가 제자리에서 전부 다른 무작위 속도로 회전하는 화면, [디렉토리 링크](src/rotating-logos)
 - logo-with-video: 정중앙에 크게 로고가 있고, 배경으로 비디오가 있는 화면, [디렉토리 링크](src/logo-with-video)
 
+## 개발자 & LLM용 개발 가이드
+
+### 핵심 원칙
+
+**HTML input/select의 `name` 어트리뷰트 = 쿼리 파라미터명**
+
+```html
+<select id="theme" name="theme">
+    <option value="dark">어두움</option>
+</select>
+<!-- → ./page/index.html?theme=dark -->
+```
+
+JavaScript 수정 없이 HTML만 추가하면 자동으로 쿼리 파라미터 기능이 작동합니다.
+
+### 새로운 섹션 추가
+
+1. **pages/\~~\~~/index.html , pages/\~~\~~/README.md 추가
+   - 디렉토리 이름은 영문 소문자, 숫자와 -만 사용 가능
+   - 쿼리 파라미터를 옵션으로 사용. 쿼리파라미터 이름은 camelCase로 작명
+
+2. **pages/index.html에 마크업 추가** (섹션 구조는 pages/README.md에 있는 기존 섹션 참고)
+   - `<div class="small-page-container">` 추가
+   - `name` 어트리뷰트를 가진 input/select 작성. name은 1에서 정한 쿼리파라미터 이름과 같음
+   - iframe의 id는 1에서 정한 디렉토리명과 같음
+
+3. **pages/README.md에 파라미터 문서화**
+   - 해당 섹션에 파라미터 테이블 추가
+
+**주의:** `applySettings` 함수 수정은 불필요합니다.
+
+더 자세한 내용은 [pages/README.md](pages/README.md)를 참고하세요.
+
+### 테스트
+pytest를 사용합니다. `mise run test`로 실행합니다.
+

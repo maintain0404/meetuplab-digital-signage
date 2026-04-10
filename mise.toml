@@ -1,0 +1,14 @@
+[tools]
+opentofu = 'latest'
+
+[tasks.test]
+description = "Run tests with pytest"
+run = "pytest tests/ -v"
+
+[tasks.test-verbose]
+description = "Run tests with detailed output"
+run = "pytest tests/ -vv"
+
+[tasks.dev-install]
+description = "Install development dependencies"
+run = "uv pip install -e '.[dev]'"
