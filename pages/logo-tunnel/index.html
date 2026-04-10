@@ -119,8 +119,8 @@
                                             const Z_NEAR         = 60;       // clip plane (too close → skip)
                                             const Z_FAR          = 3200;     // spawn distance
                                             const FOV            = 650;      // perspective focal length
-                                            const LOGO_W         = 190;      // logo width in world units
-                                            const LOGO_H         = 80;       // logo height in world units
+                                            let LOGO_W           = 190;      // logo width in world units
+                                            let LOGO_H           = 80;       // logo height in world units
                                             const BASE_SPEED     = 9;        // z-units per frame
                                             const TWIST_PER_RING = Math.PI / LOGOS_PER_RING; // helical twist
 
@@ -268,7 +268,11 @@
                                                 requestAnimationFrame(frame);
                                             };
 
-                                            logoImg.onload  = () => requestAnimationFrame(frame);
+                                            logoImg.onload = function() {
+                                                const aspectRatio = this.naturalWidth / this.naturalHeight;
+                                                LOGO_H = LOGO_W / aspectRatio;
+                                                requestAnimationFrame(frame);
+                                            };
                                             logoImg.onerror = () => requestAnimationFrame(frame); // fallback
                                         })();
     </script>
