@@ -15,6 +15,15 @@ resource "google_storage_bucket" "signage" {
     enabled = true
   }
 
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+    condition {
+      num_newer_versions = 5
+    }
+  }
+
   lifecycle {
     prevent_destroy = true
   }
