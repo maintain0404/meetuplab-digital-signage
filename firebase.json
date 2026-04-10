@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "firebase-debug.log",
+      "**/.*",
+      "infra/**",
+      "tests/**",
+      "pyproject.toml",
+      "mise.toml",
+      "uv.lock",
+      ".python-version",
+      "**/README.md"
+    ],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/pages/index.html"
+      }
+    ]
+  }
+}

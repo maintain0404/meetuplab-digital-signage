@@ -25,9 +25,15 @@ variable "environment" {
   description = "Environment name (production/staging/development)"
   type        = string
   default     = "production"
-  
+
   validation {
     condition     = contains(["production", "staging", "development"], var.environment)
     error_message = "Environment must be production, staging, or development."
   }
+}
+
+variable "firebase_admin_members" {
+  description = "List of email addresses to grant Firebase Admin role"
+  type        = list(string)
+  default     = ["maintain0404@gmail.com"]
 }

@@ -12,3 +12,8 @@ output "website_url" {
   description = "Website URL"
   value       = "https://${google_storage_bucket.signage.name}.storage.googleapis.com"
 }
+
+output "firebase_hosting_url" {
+  description = "Firebase Hosting URL"
+  value       = "https://${google_firebase_hosting_site.default.site_id}.web.app"
+}
