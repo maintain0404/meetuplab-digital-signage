@@ -1,0 +1,331 @@
+<head></head>
+<body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* === THEME: SYSTEM DEFAULT === */
+    @media (prefers-color-scheme: light) {
+        body { background-color: #f0f0f0; }
+    }
+    @media (prefers-color-scheme: dark) {
+        body { background-color: #080808; }
+    }
+
+    /* === THEME: QUERY PARAM OVERRIDE === */
+    body[data-theme="light"] { background-color: #f0f0f0; }
+    body[data-theme="dark"]  { background-color: #080808; }
+
+    /* =========================================
+       SCROLLING BACKGROUND
+       ========================================= */
+    .scroll-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        pointer-events: none;
+    }
+
+    .scroll-row {
+        height: 80px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    .scroll-track {
+        display: flex;
+        align-items: center;
+        gap: 48px;
+        flex-shrink: 0;
+        will-change: transform;
+    }
+
+    .scroll-track.go-left {
+        animation: scroll-left var(--dur, 20s) linear infinite;
+    }
+    .scroll-track.go-right {
+        animation: scroll-right var(--dur, 20s) linear infinite;
+    }
+
+    .scroll-track img {
+        height: 52px;
+        width: auto;
+        flex-shrink: 0;
+        display: block;
+    }
+
+    @keyframes scroll-left {
+        from { transform: translateX(0); }
+        to   { transform: translateX(-50%); }
+    }
+    @keyframes scroll-right {
+        from { transform: translateX(-50%); }
+        to   { transform: translateX(0); }
+    }
+
+    /* =========================================
+       VIGNETTE — DRAWS FOCUS TO THE CENTER
+       ========================================= */
+    .vignette {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    @media (prefers-color-scheme: light) {
+        .vignette {
+            background: radial-gradient(
+                ellipse 68% 68% at center,
+                rgba(240,240,240,0) 20%,
+                rgba(240,240,240,0.88) 100%
+            );
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        .vignette {
+            background: radial-gradient(
+                ellipse 68% 68% at center,
+                rgba(8,8,8,0) 20%,
+                rgba(8,8,8,0.92) 100%
+            );
+        }
+    }
+    body[data-theme="light"] .vignette {
+        background: radial-gradient(
+            ellipse 68% 68% at center,
+            rgba(240,240,240,0) 20%,
+            rgba(240,240,240,0.88) 100%
+        );
+    }
+    body[data-theme="dark"] .vignette {
+        background: radial-gradient(
+            ellipse 68% 68% at center,
+            rgba(8,8,8,0) 20%,
+            rgba(8,8,8,0.92) 100%
+        );
+    }
+
+    /* =========================================
+       SPOTLIGHT — BREATHES SLOWLY BEHIND HERO
+       ========================================= */
+    .spotlight {
+        position: fixed;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+        animation: spotlight-breathe 6s ease-in-out infinite;
+    }
+
+    @media (prefers-color-scheme: light) {
+        .spotlight {
+            background: radial-gradient(
+                ellipse 48% 42% at center,
+                rgba(255,255,255,1)   0%,
+                rgba(255,255,255,0.5) 45%,
+                transparent 72%
+            );
+        }
+    }
+    @media (prefers-color-scheme: dark) {
+        .spotlight {
+            background: radial-gradient(
+                ellipse 48% 42% at center,
+                rgba(255,255,255,0.10) 0%,
+                rgba(255,255,255,0.04) 45%,
+                transparent 72%
+            );
+        }
+    }
+    body[data-theme="light"] .spotlight {
+        background: radial-gradient(
+            ellipse 48% 42% at center,
+            rgba(255,255,255,1)   0%,
+            rgba(255,255,255,0.5) 45%,
+            transparent 72%
+        );
+    }
+    body[data-theme="dark"] .spotlight {
+        background: radial-gradient(
+            ellipse 48% 42% at center,
+            rgba(255,255,255,0.10) 0%,
+            rgba(255,255,255,0.04) 45%,
+            transparent 72%
+        );
+    }
+
+    @keyframes spotlight-breathe {
+        0%, 100% { transform: scale(1);    opacity: 1; }
+        50%       { transform: scale(1.10); opacity: 0.82; }
+    }
+
+    /* =========================================
+       HERO — THE UNFORGETTABLE LOGO
+       ========================================= */
+    .hero {
+        position: fixed;
+        inset: 0;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Gentle float + subtle scale pulse */
+    .hero-logo-wrap {
+        animation: hero-float 7s ease-in-out infinite;
+    }
+
+    @keyframes hero-float {
+        0%, 100% { transform: translateY(0px)   scale(1); }
+        50%       { transform: translateY(-16px) scale(1.025); }
+    }
+
+    .hero-logo {
+        display: block;
+        width: min(520px, 58vw);
+        height: auto;
+    }
+
+    /* Dark mode: multi-layer neon glow */
+    @media (prefers-color-scheme: dark) {
+        .hero-logo {
+            filter:
+                drop-shadow(0 0  18px rgba(255,255,255,0.60))
+                drop-shadow(0 0  55px rgba(255,255,255,0.28))
+                drop-shadow(0 0 110px rgba(255,255,255,0.14));
+        }
+    }
+    body[data-theme="dark"] .hero-logo {
+        filter:
+            drop-shadow(0 0  18px rgba(255,255,255,0.60))
+            drop-shadow(0 0  55px rgba(255,255,255,0.28))
+            drop-shadow(0 0 110px rgba(255,255,255,0.14));
+    }
+
+    /* Light mode: cinematic depth shadow */
+    @media (prefers-color-scheme: light) {
+        .hero-logo {
+            filter:
+                drop-shadow(0  4px 18px rgba(0,0,0,0.20))
+                drop-shadow(0 14px 50px rgba(0,0,0,0.13));
+        }
+    }
+    body[data-theme="light"] .hero-logo {
+        filter:
+            drop-shadow(0  4px 18px rgba(0,0,0,0.20))
+            drop-shadow(0 14px 50px rgba(0,0,0,0.13));
+    }
+
+    /* Mirror reflection fading downward */
+    .hero-reflection {
+        display: block;
+        width: min(520px, 58vw);
+        height: auto;
+        transform: scaleY(-1);
+        opacity: 0.18;
+        -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 60%);
+        mask-image:         linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 60%);
+        margin-top: 3px;
+        pointer-events: none;
+    }
+</style>
+
+<!-- Scrolling background: auto-built by JavaScript -->
+<div class="scroll-bg" id="scrollBg"></div>
+
+<!-- Vignette: darkens edges to focus center -->
+<div class="vignette"></div>
+
+<!-- Spotlight: breathes behind hero -->
+<div class="spotlight"></div>
+
+<!-- Hero logo -->
+<div class="hero">
+    <div class="hero-logo-wrap">
+        <img class="hero-logo" id="heroImg" src="" alt="Logo">
+    </div>
+    <img class="hero-reflection" id="reflectionImg" src="" alt="" aria-hidden="true">
+</div>
+
+<script>
+    // Apply theme from query parameter
+    const applyTheme = () => {
+        const params = new URLSearchParams(location.search);
+        const theme = params.get('theme');
+        if (theme === 'light' || theme === 'dark') {
+            document.body.setAttribute('data-theme', theme);
+        }
+    };
+    applyTheme();
+
+    const isDark = () => {
+        const t = document.body.getAttribute('data-theme');
+        if (t) return t === 'dark';
+        return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    };
+
+    const LOGO_DARK  = '../../public/images/logo-white-title-white-subtitle.png';
+    const LOGO_LIGHT = '../../public/images/logo-black-title-black-subtitle.png';
+    const logoSrc = () => isDark() ? LOGO_DARK : LOGO_LIGHT;
+
+    // Set hero and reflection logos
+    const src = logoSrc();
+    document.getElementById('heroImg').src = src;
+    document.getElementById('reflectionImg').src = src;
+
+    // Build scrolling rows
+    const bg = document.getElementById('scrollBg');
+
+    // Each row: direction, scroll duration (s), opacity
+    const ROW_CONFIG = [
+        { dir: 'go-left',  dur: 18, opacity: 0.13 },
+        { dir: 'go-right', dur: 24, opacity: 0.16 },
+        { dir: 'go-left',  dur: 14, opacity: 0.11 },
+        { dir: 'go-right', dur: 28, opacity: 0.18 },
+        { dir: 'go-left',  dur: 21, opacity: 0.12 },
+        { dir: 'go-right', dur: 16, opacity: 0.15 },
+        { dir: 'go-left',  dur: 26, opacity: 0.10 },
+        { dir: 'go-right', dur: 19, opacity: 0.14 },
+        { dir: 'go-left',  dur: 22, opacity: 0.12 },
+    ];
+
+    // 2× logos per track ensures seamless loop via translateX(-50%)
+    const LOGOS_PER_SET = 16;
+
+    ROW_CONFIG.forEach(({ dir, dur, opacity }) => {
+        const row = document.createElement('div');
+        row.className = 'scroll-row';
+
+        const track = document.createElement('div');
+        track.className = `scroll-track ${dir}`;
+        track.style.setProperty('--dur', `${dur}s`);
+        track.style.opacity = opacity;
+
+        for (let i = 0; i < LOGOS_PER_SET * 2; i++) {
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = '';
+            img.setAttribute('aria-hidden', 'true');
+            track.appendChild(img);
+        }
+
+        row.appendChild(track);
+        bg.appendChild(row);
+    });
+</script>
+</body>
