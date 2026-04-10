@@ -32,5 +32,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: `🔍 Preview: ${{ steps.firebase-deploy.outputs.details_url }}/pages/index.html`
+              body: `Visit the preview URL for this PR (updated for commit ${{ github.event.pull_request.head.sha }}):\n\n🔥 ${{ steps.firebase-deploy.outputs.details_url }}/pages/index.html 🔥\n\n<sub>Sign in to this preview URL will be disabled. [Learn more](https://firebase.google.com/docs/hosting/manage-hosting-resources)</sub>`
             })
