@@ -1,6 +1,3 @@
-[tools]
-opentofu = 'latest'
-
 [tasks.test]
 description = "Run tests with pytest"
 run = "pytest tests/ -v"
